@@ -73,7 +73,7 @@
     <tr th:each="file : ${files}">
         <td><span th:text="${file.isDirectory()} ? 'D' : 'F'"></span></td>
         <td><a th:href="${path} + '/' + ${file.getName()}" th:text="${file.getName()}"></a></td>
-        <td><span th:text="${file.getLength()}"></span></td>
+        <td><span th:text="${T(com.uanid.toy.simplefileserver.FileUtils).byteCountToDisplaySize(file.getLength())}"></span></td>
     </tr>
     </tbody>
 </table>
