@@ -41,7 +41,11 @@ stages:
             artifact: MyApp
             patterns: "*.jar"
           - script: |
+              ls -al ../MyApp
+              mkdir target/
               cp ../MyApp/*.jar target/
+              ls -al
+              ls -al target
               docker build -t $(docker.image):$(buildNumber) -t $(docker.image):latest .
               docker login $(docker.registry.public) -u $(docker.username) -p $(docker.password)
               docker push $(docker.image):$(buildNumber)
