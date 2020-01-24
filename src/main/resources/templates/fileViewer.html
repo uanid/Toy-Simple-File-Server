@@ -56,9 +56,10 @@
 <table>
     <thead>
     <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Length</th>
+        <th style="text-align: left">Type</th>
+        <th style="text-align: left">Name</th>
+        <th style="text-align: left">Length</th>
+        <th style="text-align: left"></th>
     </tr>
     </thead>
     <tbody>
@@ -69,11 +70,21 @@
         <td><span>D</span></td>
         <td><a th:href="${prevPath}">..</a></td>
         <td><span>0</span></td>
+        <td></td>
     </tr>
     <tr th:each="file : ${files}">
         <td><span th:text="${file.isDirectory()} ? 'D' : 'F'"></span></td>
         <td><a th:href="${path} + '/' + ${file.getName()}" th:text="${file.getName()}"></a></td>
-        <td><span th:text="${T(com.uanid.toy.simplefileserver.FileUtils).byteCountToDisplaySize(file.getLength())}"></span></td>
+        <td><span
+                th:text="${T(com.uanid.toy.simplefileserver.FileUtils).byteCountToDisplaySize(file.getLength())}"></span>
+        </td>
+        <td>
+            <form th:unless="${file.isDirectory()}" enctype="multipart/form-data" method="post">
+                <input name="target" type="hidden" th:value="${file.getName()}">
+                <input type="submit" value="삭제">
+                <input name="requestType" type="hidden" value="delete">
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
