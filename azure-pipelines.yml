@@ -35,12 +35,14 @@ stages:
       - job: Docker_Build_Job
         displayName: Docker Image Build
         container:
-          image: gitlab/dind:latest
+          image: docker:19-dind
         steps:
           - download: current
             artifact: MyApp
             patterns: "*.jar"
           - script: |
+              dockerd &
+              sleep 2
               mkdir target/
               cp ../MyApp/*.jar target/
               docker build -t $(docker.image):$(buildNumber) -t uanid/simple-file-server:latest .
