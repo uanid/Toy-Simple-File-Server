@@ -1,4 +1,4 @@
-package com.uanid.toy.simplehttpserver.model;
+package com.uanid.toy.simplefileserver.model;
 
 import lombok.Getter;
 import lombok.Setter;

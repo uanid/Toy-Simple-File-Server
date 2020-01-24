@@ -1,4 +1,4 @@
-package com.uanid.toy.simplehttpserver.service;
+package com.uanid.toy.simplefileserver.service;
 
 import org.springframework.stereotype.Service;
 

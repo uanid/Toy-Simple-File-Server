@@ -1,10 +1,10 @@
-package com.uanid.toy.simplehttpserver.controller;
+package com.uanid.toy.simplefileserver.controller;
 
-import com.uanid.toy.simplehttpserver.model.BadRequestException;
-import com.uanid.toy.simplehttpserver.model.DownloadableFileMeta;
-import com.uanid.toy.simplehttpserver.model.FileMeta;
-import com.uanid.toy.simplehttpserver.model.InvalidPathException;
-import com.uanid.toy.simplehttpserver.service.StorageService;
+import com.uanid.toy.simplefileserver.model.BadRequestException;
+import com.uanid.toy.simplefileserver.model.DownloadableFileMeta;
+import com.uanid.toy.simplefileserver.model.FileMeta;
+import com.uanid.toy.simplefileserver.model.InvalidPathException;
+import com.uanid.toy.simplefileserver.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -33,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DefaultController {
 
-    private final StorageService storageService;
+    private final FileStorageService storageService;
 
     @GetMapping("/ping")
     @ResponseBody

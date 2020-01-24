@@ -9,10 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.uanid.toy</groupId>
-	<artifactId>simple-http-server</artifactId>
+	<artifactId>simple-file-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>simple-http-server</name>
-	<description>Demo project for Spring Boot</description>
+	<name>simple-file-server</name>
 
 	<properties>
 		<java.version>1.8</java.version>

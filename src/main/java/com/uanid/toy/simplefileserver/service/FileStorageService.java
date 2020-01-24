@@ -1,15 +1,14 @@
-package com.uanid.toy.simplehttpserver.service;
+package com.uanid.toy.simplefileserver.service;
 
-import com.uanid.toy.simplehttpserver.model.DownloadableFileMeta;
-import com.uanid.toy.simplehttpserver.model.FileMeta;
-import com.uanid.toy.simplehttpserver.model.InvalidPathException;
+import com.uanid.toy.simplefileserver.model.DownloadableFileMeta;
+import com.uanid.toy.simplefileserver.model.FileMeta;
+import com.uanid.toy.simplefileserver.model.InvalidPathException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,7 +17,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class StorageService {
+public class FileStorageService implements StorageService {
 
     private final ValidationService validationService;
 
