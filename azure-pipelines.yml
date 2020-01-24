@@ -11,7 +11,7 @@ resources:
 variables:
   buildNumber: '$(Build.BuildId)'
   docker.registry.public: registry.hub.docker.com
-  docker.image: uanid/Simple-File-Server
+  docker.image: uanid/simple-file-server
 
 pool:
   vmImage: 'ubuntu-latest'
