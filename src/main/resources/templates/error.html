@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Invalid directory path</title>
+</head>
+
+<body>
+
+<nav>
+    <h1>DeveloperMessage: <span th:text="${message}"></span></h1>
+    <h1>Error: <span th:text="${error}"></span></h1>
+    <h1>ErrorMessage: <span th:text="${errorMessage}"></span></h1>
+</nav>
+
+<input onclick="window.history.back();" type="button" value="돌아가기">
+
+</body>
+</html>

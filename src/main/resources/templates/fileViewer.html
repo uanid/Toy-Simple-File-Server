@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Directory Listing</title>
+
+</head>
+
+<body>
+
+<nav>
+    <h1><span th:text="'Directory listing for ' + ${dirPath}"></span></h1>
+</nav>
+
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <form enctype="multipart/form-data" method="post">
+                <td><h5>파일 업로드</h5></td>
+                <td><input name="file" type="file"></td>
+                <td><input type="submit" value="업로드"></td>
+                <input name="requestType" type="hidden" value="file">
+            </form>
+        </tr>
+        <tr>
+            <form enctype="multipart/form-data" method="post">
+                <td><h5>디렉토리 생성</h5></td>
+                <td><input name="directory" type="text"></td>
+                <td><input type="submit" value="생성"></td>
+                <input name="requestType" type="hidden" value="directory">
+            </form>
+        </tr>
+        <tr>
+            <form enctype="multipart/form-data" method="post">
+                <td><h5>대상 삭제</h5></td>
+                <td><input name="target" type="text"></td>
+                <td><input type="submit" value="삭제"></td>
+                <input name="requestType" type="hidden" value="delete">
+            </form>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2>Files</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Length</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:unless="${files}">
+        <td colspan="3">No files available</td>
+    </tr>
+    <tr th:unless="${isRootPath}">
+        <td><span>D</span></td>
+        <td><a th:href="${prevPath}">..</a></td>
+        <td><span>0</span></td>
+    </tr>
+    <tr th:each="file : ${files}">
+        <td><span th:text="${file.isDirectory()} ? 'D' : 'F'"></span></td>
+        <td><a th:href="${path} + '/' + ${file.getName()}" th:text="${file.getName()}"></a></td>
+        <td><span th:text="${file.getLength()}"></span></td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>
