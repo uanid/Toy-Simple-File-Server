@@ -43,7 +43,7 @@ stages:
           - script: |
               mkdir target/
               cp ../MyApp/*.jar target/
-              docker build -t $(docker.image):$(buildNumber) -t $(docker.image):latest .
-              docker login $(docker.registry.public) -u $(docker.username) -p $(docker.password)
+              docker build -t $(docker.image):$(buildNumber) -t uanid/simple-file-server:latest .
+              docker login -u $(docker.username) -p $(docker.password) $(docker.registry.public)
               docker images
-              docker push $(docker.image):latest
+              docker push uanid/simple-file-server:latest
