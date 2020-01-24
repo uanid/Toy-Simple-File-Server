@@ -10,7 +10,7 @@ resources:
 
 variables:
   buildNumber: '$(Build.BuildId)'
-  docker.registry.public: registry.hub.docker.com
+  docker.registry.public: docker.io
   docker.image: uanid/simple-file-server
 
 pool:
@@ -41,11 +41,8 @@ stages:
             artifact: MyApp
             patterns: "*.jar"
           - script: |
-              ls -al ../MyApp
               mkdir target/
               cp ../MyApp/*.jar target/
-              ls -al
-              ls -al target
               docker build -t $(docker.image):$(buildNumber) -t $(docker.image):latest .
               docker login $(docker.registry.public) -u $(docker.username) -p $(docker.password)
               docker push $(docker.image):$(buildNumber)
