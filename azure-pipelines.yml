@@ -34,8 +34,6 @@ stages:
     jobs:
       - job: Docker_Build_Job
         displayName: Docker Image Build
-        container:
-          image: docker:19-dind
         steps:
           - download: current
             artifact: MyApp
