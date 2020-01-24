@@ -101,6 +101,14 @@ public class DefaultController {
                 model.addAttribute("isRootPath", false);
             }
 
+            fileMetas.sort((m1, m2) -> {
+                if (m1.isDirectory() == m2.isDirectory()) {
+                    return m1.getName().compareTo(m2.getName());
+                } else {
+                    return m1.isDirectory() ? -1 : 1;
+                }
+            });
+
             model.addAttribute("files", fileMetas);
             model.addAttribute("dirPath", requestPath);
             return "fileViewer";
