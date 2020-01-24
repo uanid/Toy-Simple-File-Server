@@ -28,7 +28,7 @@ stages:
           - script: |
               mvn package
           - publish: target/
-            artifact: NotiApp
+            artifact: MyApp
   - stage: Docker_Build_Stage
     displayName: Docker Image Build
     jobs:
@@ -38,10 +38,10 @@ stages:
           image: gitlab/dind:latest
         steps:
           - download: current
-            artifact: NotiApp
+            artifact: MyApp
             patterns: "*.jar"
           - script: |
-              cp ../NotiApp/*.jar .
+              cp ../MyApp/*.jar target/
               docker build -t $(docker.image):$(buildNumber) -t $(docker.image):latest .
               docker login $(docker.registry.public) -u $(docker.username) -p $(docker.password)
               docker push $(docker.image):$(buildNumber)
