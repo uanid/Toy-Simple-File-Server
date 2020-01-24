@@ -45,5 +45,5 @@ stages:
               cp ../MyApp/*.jar target/
               docker build -t $(docker.image):$(buildNumber) -t $(docker.image):latest .
               docker login $(docker.registry.public) -u $(docker.username) -p $(docker.password)
-              docker push $(docker.image):$(buildNumber)
+              docker images
               docker push $(docker.image):latest
