@@ -42,7 +42,7 @@ stages:
             patterns: "*.jar"
           - script: |
               cp ../NotiApp/*.jar .
-              docker build -t $(docker.registry.public)/$(docker.image):$(buildNumber) -t $(registryDeploy)/$(docker.image):latest .
+              docker build -t $(docker.image):$(buildNumber) -t$(docker.image):latest .
               docker login $(docker.registry.public) -u $(docker.username) -p $(docker.password)
-              docker push $(docker.registry.public)/$(docker.image):$(buildNumber)
-              docker push $(docker.registry.public)/$(docker.image):latest
+              docker push $(docker.image):$(buildNumber)
+              docker push $(docker.image):latest
