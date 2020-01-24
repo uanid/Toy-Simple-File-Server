@@ -1,0 +1,48 @@
+# Docker
+# Build a Docker image 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  buildNumber: '$(Build.BuildId)'
+  docker.registry.public: registry.hub.docker.com
+  docker.image: uanid/Simple-File-Server
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Jar_Build_Stage
+    displayName: Build Jar Stage
+    jobs:
+      - job: Jar_Build_Job
+        displayName: Build Jar Job
+        container:
+          image: maven:3.3-jdk-8
+        steps:
+          - script: |
+              mvn package
+          - publish: target/
+            artifact: NotiApp
+  - stage: Docker_Build_Stage
+    displayName: Docker Image Build
+    jobs:
+      - job: Docker_Build_Job
+        displayName: Docker Image Build
+        container:
+          image: gitlab/dind:latest
+        steps:
+          - download: current
+            artifact: NotiApp
+            patterns: "*.jar"
+          - script: |
+              cp ../NotiApp/*.jar .
+              docker build -t $(docker.registry.public)/$(docker.image):$(buildNumber) -t $(registryDeploy)/$(docker.image):latest .
+              docker login $(docker.registry.public) -u $(docker.username) -p $(docker.password)
+              docker push $(docker.registry.public)/$(docker.image):$(buildNumber)
+              docker push $(docker.registry.public)/$(docker.image):latest
