@@ -4,7 +4,7 @@ A simple (upload/download)-able file server.
 
 No authentication feature. Please use this application on reliable network.
 
-If you want setup to anonymous users can download and reliable users can upload/download, See above architecture diagrams.
+If you want setup to anonymous users can download and reliable users can upload/download, See below architecture diagrams.
 
 ![SampleImage](https://github.com/Uanid/Toy-Simple-File-Server/blob/master/persistence/sample1.PNG?raw=true)
 
@@ -41,7 +41,7 @@ services:
 
 ```
 
-# Recommeded Setup
+# Recommended Setup
 ![diagram-sample](https://github.com/Uanid/Toy-Simple-File-Server/blob/master/persistence/sample2.PNG?raw=true)
 
 In my case, unreliable zone(public internet) users can access only-download server and reliable zone users can access upload/download server.
