@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  up-file-server:
+    image: uanid/simple-file-server
+    ports:
+      - 8080:2000
+    environment:
+      ROOT_PATH: /mnt/persistence
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/persistence:/mnt/persistence
+    container_name: up-file-server
+    hostname: up-file-server
+  down-file-server:
+    image: halverneus/static-file-server:latest
+    ports:
+      - 80:8080
+    environment:
+      CORS: "true"
+      FOLDER: "/var/ftp"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/persistence:/var/ftp
+    container_name: down-file-server
+    hostname: down-file-server
