@@ -59,7 +59,7 @@ public class DefaultController {
             storageService.createDirectory(requestPath + "/" + directoryName);
         } else if (requestType.equals("delete") && deleteTarget != null) {
             if (!storageService.delete(deleteTarget)) {
-                throw new BadRequestException("Cannot delete file or directory, maybe directory one or more has child");
+                throw new IllegalStateException("Delete failed. Maybe target is not empty directory or locked");
             }
         } else {
             throw new BadRequestException("cannot resolve uploadType. uploadType is available only 'file' and 'directory'");
