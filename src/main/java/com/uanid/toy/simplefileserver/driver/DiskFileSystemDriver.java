@@ -1,11 +1,10 @@
-package com.uanid.toy.simplefileserver.service;
+package com.uanid.toy.simplefileserver.driver;
 
+import com.uanid.toy.simplefileserver.FileUtils;
 import com.uanid.toy.simplefileserver.model.DownloadableFileMeta;
 import com.uanid.toy.simplefileserver.model.FileMeta;
 import com.uanid.toy.simplefileserver.model.InvalidPathException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,19 +12,16 @@ import java.util.List;
 
 /**
  * @author uanid
- * @since 2020-01-24
+ * @since 2020-02-03
  */
-@Service
 @RequiredArgsConstructor
-public class FileStorageService implements StorageService {
+public class DiskFileSystemDriver implements AbstractFileDriver {
 
-    private final ValidationService validationService;
+    private final String rootPathContext;
 
-    @Value("${rootPath}")
-    private String rootPathContext;
-
-    public synchronized DownloadableFileMeta getFile(String path) throws InvalidPathException, FileNotFoundException {
-        if (!validationService.isSecurePath(path)) {
+    @Override
+    public DownloadableFileMeta getFile(String path) throws InvalidPathException, FileNotFoundException {
+        if (!FileUtils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
 
@@ -51,8 +47,9 @@ public class FileStorageService implements StorageService {
         }
     }
 
-    public synchronized boolean delete(String path) throws InvalidPathException, FileNotFoundException {
-        if (!validationService.isSecurePath(path)) {
+    @Override
+    public boolean delete(String path) throws InvalidPathException, FileNotFoundException {
+        if (!FileUtils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File fileOrDir = new File(rootPathContext, path);
@@ -62,8 +59,9 @@ public class FileStorageService implements StorageService {
         return fileOrDir.delete();
     }
 
-    public synchronized boolean createDirectory(String path) throws InvalidPathException {
-        if (!validationService.isSecurePath(path)) {
+    @Override
+    public boolean createDirectory(String path) throws InvalidPathException {
+        if (!FileUtils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File file = new File(rootPathContext, path);
@@ -73,8 +71,9 @@ public class FileStorageService implements StorageService {
         return file.mkdirs();
     }
 
-    public synchronized void uploadFile(String path, String fileName, InputStream is) throws InvalidPathException {
-        if (!validationService.isSecurePath(path)) {
+    @Override
+    public void uploadFile(String path, String fileName, InputStream is) throws InvalidPathException {
+        if (!FileUtils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File dir = new File(rootPathContext, path);
@@ -106,8 +105,9 @@ public class FileStorageService implements StorageService {
         }
     }
 
+    @Override
     public boolean isFile(String path) throws InvalidPathException {
-        if (!validationService.isSecurePath(path)) {
+        if (!FileUtils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File file = new File(rootPathContext, path);
@@ -117,8 +117,9 @@ public class FileStorageService implements StorageService {
         return file.isFile();
     }
 
-    public synchronized List<FileMeta> listingDir(String path) throws InvalidPathException, FileNotFoundException {
-        if (!validationService.isSecurePath(path)) {
+    @Override
+    public List<FileMeta> listingDir(String path) throws InvalidPathException, FileNotFoundException {
+        if (!FileUtils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
 
