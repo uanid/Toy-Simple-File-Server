@@ -59,7 +59,7 @@ public class DefaultController {
         } else if (requestType.equals("directory") && directoryName != null) {
             storageService.createDirectory(requestPath + "/" + directoryName);
         } else if (requestType.equals("delete") && deleteTarget != null) {
-            if (!storageService.delete(deleteTarget)) {
+            if (!storageService.delete(requestPath + "/" + deleteTarget)) {
                 throw new IllegalStateException("Delete failed. Maybe target is not empty directory or locked");
             }
         } else {
