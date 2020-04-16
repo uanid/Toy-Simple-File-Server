@@ -11,10 +11,10 @@ public class FileUtils {
     private static final String PREVIOUS = "..";
 
     public static boolean isSecurePath(String path) {
-        Function<String, Boolean> isNotSecure = s -> path.contains("/" + s + "/") || path.endsWith("/" + s);
+        Function<String, Boolean> hasPathFunction = s -> path.contains("/" + s + "/") || path.endsWith("/" + s);
 
-        boolean h1 = isNotSecure.apply(HERE);
-        boolean h2 = isNotSecure.apply(PREVIOUS);
+        boolean h1 = hasPathFunction.apply(HERE);
+        boolean h2 = hasPathFunction.apply(PREVIOUS);
         return !(h1 || h2);
     }
 
