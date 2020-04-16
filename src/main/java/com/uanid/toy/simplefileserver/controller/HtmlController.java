@@ -32,16 +32,9 @@ import java.util.List;
 @Controller
 @RequestMapping
 @RequiredArgsConstructor
-public class DefaultController {
+public class HtmlController {
 
     private final StorageService storageService;
-
-    @GetMapping("/ping")
-    @ResponseBody
-    public ResponseEntity<String> ping(HttpServletResponse response) {
-        response.setContentType(MediaType.APPLICATION_JSON.toString());
-        return new ResponseEntity<>("\"pong\"", HttpStatus.OK);
-    }
 
     @PostMapping("/**")
     public String upload(HttpServletRequest request, Model model,
