@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,7 +52,8 @@ public class ApiController {
             storageService.createDirectory(requestPath);
         } else {
             try {
-                storageService.uploadFile(requestPath, file.getName(), file.getInputStream());
+                File javaFile = new File(requestPath);
+                storageService.uploadFile(javaFile.getParent(), javaFile.getName(), file.getInputStream());
             } catch (IOException e) {
                 throw new IllegalArgumentException("Cannot get file inputstream");
             }
