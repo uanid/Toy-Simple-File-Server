@@ -29,7 +29,7 @@ public class FileDriverConfig {
 
     @Bean
     public DiskFileSystemDriver diskFileSystemDriver() {
-        log.warn("DiskFileSystemDriver initialized --rootPath={}", rootPath);
+        log.info("DiskFileSystemDriver initialized --rootPath={}", rootPath);
         return new DiskFileSystemDriver(rootPath);
     }
 }
