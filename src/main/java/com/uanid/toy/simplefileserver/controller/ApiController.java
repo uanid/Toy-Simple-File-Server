@@ -38,12 +38,6 @@ public class ApiController {
 
     private final StorageService storageService;
 
-    @GetMapping("/ping")
-    public String ping(HttpServletResponse response) {
-        response.setContentType(MediaType.APPLICATION_JSON.toString());
-        return "\"ping\"";
-    }
-
     private String getRequestPath(HttpServletRequest request) {
         String path = Utils.urlDecode(request.getRequestURI());
         return path.substring("/api".length());
@@ -53,10 +47,14 @@ public class ApiController {
     public void upload(HttpServletRequest request,
                        @RequestParam(value = "file", required = false) MultipartFile file) throws InvalidPathException {
         String requestPath = getRequestPath(request);
-        try {
-            storageService.uploadFile(requestPath, file.getName(), file.getInputStream());
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Cannot get file inputstream");
+        if (file == null) {
+            storageService.createDirectory(requestPath);
+        } else {
+            try {
+                storageService.uploadFile(requestPath, file.getName(), file.getInputStream());
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Cannot get file inputstream");
+            }
         }
     }
 
