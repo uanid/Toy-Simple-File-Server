@@ -1,6 +1,6 @@
 package com.uanid.toy.simplefileserver.driver;
 
-import com.uanid.toy.simplefileserver.FileUtils;
+import com.uanid.toy.simplefileserver.Utils;
 import com.uanid.toy.simplefileserver.model.DownloadableFileMeta;
 import com.uanid.toy.simplefileserver.model.FileMeta;
 import com.uanid.toy.simplefileserver.model.InvalidPathException;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author uanid
@@ -19,9 +20,53 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     private final String rootPathContext;
 
+    private static final String[] WINDOWS_ILLEGAL_END_CHAR = {".", " "};
+    private static final String[] WINDOWS_ILLEGAL_CHAR = {"<", ">", ":", "\"", "\\", "|", "?", "*"};
+    private static final String[] WINDOWS_RESERVE_NAME = {"CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
+    private static final String HERE = ".";
+    private static final String PREVIOUS = "..";
+
+    public boolean isSecurePath(String path) {
+        Function<String, Boolean> hasPathFunction = s -> path.contains("/" + s + "/") || path.endsWith("/" + s);
+
+        boolean h1 = hasPathFunction.apply(HERE);
+        boolean h2 = hasPathFunction.apply(PREVIOUS);
+        return !(h1 || h2);
+    }
+
+    private boolean isIllegalPath(String path) {
+        for (String s : WINDOWS_ILLEGAL_END_CHAR) {
+            if (path.endsWith(s)) {
+                return false;
+            }
+        }
+        for (String s : WINDOWS_ILLEGAL_CHAR) {
+            if (path.contains(s)) {
+                return false;
+            }
+        }
+        if (!path.equals("/")) {
+            if (path.endsWith("/")) {
+                path = path.substring(0, path.length() - 1);
+            }
+            int i1 = path.lastIndexOf('/');
+            if (i1 == -1) {
+                throw new IllegalArgumentException("Path cannot contains / " + path);
+            } else {
+                String lastItemName = path.substring(i1 + 1);
+                for (String s : WINDOWS_RESERVE_NAME) {
+                    if (lastItemName.contains(s)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public DownloadableFileMeta getFile(String path) throws InvalidPathException, FileNotFoundException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
 
@@ -49,7 +94,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public boolean delete(String path) throws InvalidPathException, FileNotFoundException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File fileOrDir = new File(rootPathContext, path);
@@ -61,7 +106,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public boolean createDirectory(String path) throws InvalidPathException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File file = new File(rootPathContext, path);
@@ -73,7 +118,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public void uploadFile(String path, String fileName, InputStream is) throws InvalidPathException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File dir = new File(rootPathContext, path);
@@ -107,7 +152,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public boolean isFile(String path) throws InvalidPathException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File file = new File(rootPathContext, path);
@@ -119,7 +164,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public List<FileMeta> listingDir(String path) throws InvalidPathException, FileNotFoundException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
 

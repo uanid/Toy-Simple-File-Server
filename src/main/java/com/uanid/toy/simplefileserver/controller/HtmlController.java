@@ -1,6 +1,6 @@
 package com.uanid.toy.simplefileserver.controller;
 
-import com.uanid.toy.simplefileserver.driver.AbstractFileDriver;
+import com.uanid.toy.simplefileserver.Utils;
 import com.uanid.toy.simplefileserver.model.BadRequestException;
 import com.uanid.toy.simplefileserver.model.DownloadableFileMeta;
 import com.uanid.toy.simplefileserver.model.FileMeta;
@@ -12,7 +12,6 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,17 +29,15 @@ import java.util.List;
  */
 @Slf4j
 @Controller
-@RequestMapping
+@RequestMapping("/html")
 @RequiredArgsConstructor
-public class DefaultController {
+public class HtmlController {
 
     private final StorageService storageService;
 
-    @GetMapping("/ping")
-    @ResponseBody
-    public ResponseEntity<String> ping(HttpServletResponse response) {
-        response.setContentType(MediaType.APPLICATION_JSON.toString());
-        return new ResponseEntity<>("\"pong\"", HttpStatus.OK);
+    private String getRequestPath(HttpServletRequest request) {
+        String path = Utils.urlDecode(request.getRequestURI());
+        return path.substring("/html".length());
     }
 
     @PostMapping("/**")
@@ -49,7 +46,7 @@ public class DefaultController {
                          @RequestParam(value = "directory", required = false) String directoryName,
                          @RequestParam(value = "target", required = false) String deleteTarget,
                          @RequestParam(value = "file", required = false) MultipartFile file) throws BadRequestException, InvalidPathException, IOException {
-        String requestPath = request.getRequestURI();
+        String requestPath = getRequestPath(request);
         if (requestPath.endsWith("/")) {
             requestPath = requestPath.substring(0, requestPath.length() - 1);
         }
@@ -72,7 +69,7 @@ public class DefaultController {
 
     @GetMapping("/**")
     public String listingAndDownload(HttpServletRequest request, HttpServletResponse response, Model model) throws InvalidPathException, FileNotFoundException {
-        String requestPath = request.getRequestURI();
+        String requestPath = getRequestPath(request);
 
         if (storageService.isFile(requestPath)) {
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
@@ -93,7 +90,7 @@ public class DefaultController {
                 model.addAttribute("path", requestPath);
             }
 
-            if (requestPath.equals("/")) {
+            if (requestPath.equals("/") || requestPath.isEmpty()) {
                 model.addAttribute("isRootPath", true);
             } else {
                 int i1 = requestPath.lastIndexOf('/');
@@ -119,7 +116,7 @@ public class DefaultController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BadRequestException.class, InvalidPathException.class})
     public String a(Exception e, HttpServletRequest request, Model model) {
-        String requestPath = request.getRequestURI();
+        String requestPath = getRequestPath(request);
         model.addAttribute("message", "Invalid directory path " + requestPath);
         model.addAttribute("error", e.getClass().getCanonicalName());
         model.addAttribute("errorMessage", e.getMessage());
@@ -129,7 +126,6 @@ public class DefaultController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({FileNotFoundException.class})
     public String a2(Exception e, HttpServletRequest request, Model model) {
-        String requestPath = request.getRequestURI();
         model.addAttribute("message", "Not found");
         model.addAttribute("error", e.getClass().getCanonicalName());
         model.addAttribute("errorMessage", e.getMessage());
@@ -139,7 +135,7 @@ public class DefaultController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(IllegalStateException.class)
     public String a3(Exception e, HttpServletRequest request, Model model) {
-        String requestPath = request.getRequestURI();
+        String requestPath = getRequestPath(request);
         model.addAttribute("message", "An internal error occurred " + requestPath);
         model.addAttribute("error", e.getClass().getCanonicalName());
         model.addAttribute("errorMessage", e.getMessage());
