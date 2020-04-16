@@ -1,6 +1,6 @@
 package com.uanid.toy.simplefileserver.driver;
 
-import com.uanid.toy.simplefileserver.FileUtils;
+import com.uanid.toy.simplefileserver.Utils;
 import com.uanid.toy.simplefileserver.model.DownloadableFileMeta;
 import com.uanid.toy.simplefileserver.model.FileMeta;
 import com.uanid.toy.simplefileserver.model.InvalidPathException;
@@ -21,7 +21,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public DownloadableFileMeta getFile(String path) throws InvalidPathException, FileNotFoundException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!Utils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
 
@@ -49,7 +49,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public boolean delete(String path) throws InvalidPathException, FileNotFoundException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!Utils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File fileOrDir = new File(rootPathContext, path);
@@ -61,7 +61,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public boolean createDirectory(String path) throws InvalidPathException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!Utils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File file = new File(rootPathContext, path);
@@ -73,7 +73,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public void uploadFile(String path, String fileName, InputStream is) throws InvalidPathException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!Utils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File dir = new File(rootPathContext, path);
@@ -107,7 +107,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public boolean isFile(String path) throws InvalidPathException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!Utils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
         File file = new File(rootPathContext, path);
@@ -119,7 +119,7 @@ public class DiskFileSystemDriver implements AbstractFileDriver {
 
     @Override
     public List<FileMeta> listingDir(String path) throws InvalidPathException, FileNotFoundException {
-        if (!FileUtils.isSecurePath(path)) {
+        if (!Utils.isSecurePath(path)) {
             throw new InvalidPathException(path + " is insecure");
         }
 

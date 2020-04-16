@@ -76,7 +76,7 @@
         <td><span th:text="${file.isDirectory()} ? 'D' : 'F'"></span></td>
         <td><a th:href="${path} + '/' + ${file.getName()}" th:text="${file.getName()}"></a></td>
         <td><span
-                th:text="${T(com.uanid.toy.simplefileserver.FileUtils).byteCountToDisplaySize(file.getLength())}"></span>
+                th:text="${T(com.uanid.toy.simplefileserver.Utils).byteCountToDisplaySize(file.getLength())}"></span>
         </td>
         <td>
             <form th:unless="${file.isDirectory()}" enctype="multipart/form-data" method="post">
