@@ -54,7 +54,7 @@ public class ApiController {
                        @RequestParam(value = "file", required = false) MultipartFile file) throws InvalidPathException {
         String requestPath = getRequestPath(request);
         try {
-            storageService.uploadFile(requestPath, file.getOriginalFilename(), file.getInputStream());
+            storageService.uploadFile(requestPath, file.getName(), file.getInputStream());
         } catch (IOException e) {
             throw new IllegalArgumentException("Cannot get file inputstream");
         }
@@ -79,12 +79,20 @@ public class ApiController {
         }
     }
 
+    @DeleteMapping("/**")
+    public void delete(HttpServletRequest request) throws FileNotFoundException, InvalidPathException {
+        String requestPath = getRequestPath(request);
+        if (!storageService.delete(requestPath)) {
+            throw new IllegalStateException("Delete failed. Maybe target is not empty directory or locked");
+        }
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BadRequestException.class, InvalidPathException.class})
     public ExceptionDto badRequest(Exception e, HttpServletRequest request, Model model) {
         String requestPath = getRequestPath(request);
         ExceptionDto exceptionDto = ExceptionDto.builder()
-                .developerMessage("Invalid directory path " + requestPath)
+                .developerMessage("Invalid path " + requestPath)
                 .error(e.getClass().getCanonicalName())
                 .errorMessage(e.getMessage())
                 .build();
