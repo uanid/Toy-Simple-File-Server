@@ -24,4 +24,5 @@ public class RootController {
     public String ping(HttpServletResponse response) {
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         return "\"ping\"";
-    }}
+    }
+}
